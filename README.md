@@ -1,59 +1,101 @@
-# Loarn
+# نظام تتبّع المشاكل والتذاكر البرمجية
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.2.
+تطبيق واجهة ويب باللغة العربية لإدارة قائمة من التذاكر أو المشاكل البرمجية. يتيح استعراض التذاكر، إضافة تذكرة جديدة، تغيير حالتها بين «قيد المتابعة» و«تم الحل»، وحذفها. يتصل التطبيق بواجهة REST API تجريبية للتدرب على عمليات HTTP في Angular.
 
-## Development server
+## المزايا
 
-To start a local development server, run:
+- جلب قائمة التذاكر من الخدمة وعرض حالة التحميل ورسالة خطأ عند تعذّر الاتصال.
+- إضافة تذكرة بعنوان يكتبه المستخدم.
+- إغلاق التذكرة أو إعادة فتحها، مع تحديث شكلها وشارة حالتها.
+- حذف تذكرة من القائمة.
+- عرض رسالة مناسبة عندما تكون القائمة فارغة.
+- واجهة عربية باتجاه من اليمين إلى اليسار، مع تخطيط متجاوب للشاشات الصغيرة.
 
-```bash
-ng serve
+## التقنيات
+
+- Angular 21، باستخدام مكوّن Angular ومزوّدات التطبيق.
+- TypeScript مع إعدادات تحقق صارمة.
+- Angular `HttpClient` و`Observables` للتواصل مع الخدمة.
+- Angular Router مُعدّ في التطبيق، ولا توجد مسارات إضافية حاليًا.
+- Vitest لاختبارات الوحدة عبر Angular CLI.
+
+## المتطلبات
+
+- Node.js وإصدار npm متوافقان مع Angular CLI 21.
+- اتصال بالإنترنت للوصول إلى واجهة JSONPlaceholder.
+
+## التشغيل محليًا
+
+1. نزّل المشروع وانتقل إلى مجلده:
+
+   ```bash
+   cd loarn
+   ```
+
+2. ثبّت الاعتماديات:
+
+   ```bash
+   npm install
+   ```
+
+3. شغّل خادم التطوير:
+
+   ```bash
+   npm start
+   ```
+
+4. افتح [http://localhost:4200](http://localhost:4200) في المتصفح. يعيد خادم التطوير تحميل التطبيق عند تعديل الملفات.
+
+## الأوامر المتاحة
+
+| الأمر | الاستخدام |
+| --- | --- |
+| `npm start` | تشغيل خادم التطوير |
+| `npm run build` | إنشاء نسخة الإنتاج داخل مجلد `dist/` |
+| `npm run watch` | إعادة بناء التطبيق تلقائيًا بإعداد التطوير |
+| `npm test` | تشغيل اختبارات الوحدة |
+| `npx ng generate component component-name` | إنشاء مكوّن Angular جديد |
+
+## طريقة الاستخدام
+
+1. عند فتح التطبيق، يطلب قائمة التذاكر من الخدمة ويعرض حتى 10 عناصر.
+2. اكتب وصف التذكرة في حقل الإدخال، ثم اضغط «تسجيل تذكرة» أو Enter لإضافتها.
+3. استخدم «إغلاق التذكرة» لتغيير حالتها إلى محلولة، أو «إعادة فتح» لإعادتها إلى المتابعة.
+4. اضغط «حذف» لإزالة التذكرة من القائمة.
+
+## واجهة البيانات التجريبية
+
+يستخدم التطبيق [JSONPlaceholder](https://jsonplaceholder.typicode.com/) بعنوان `/todos` كمصدر بيانات تدريبي:
+
+- `GET /todos?_limit=10` لجلب التذاكر.
+- `POST /todos` لإضافة تذكرة.
+- `PUT /todos/{id}` لتحديث حالة التذكرة.
+- `DELETE /todos/{id}` لحذف تذكرة.
+
+JSONPlaceholder خدمة وهمية للتجارب؛ عمليات الإضافة والتحديث والحذف تحاكي استجابات API ولا تحفظ التغييرات بشكل دائم. لذلك قد لا تبقى التعديلات بعد إعادة تحميل الصفحة، وقد تعود بيانات القائمة إلى حالتها التجريبية. يلزم ربط التطبيق بخادم خلفي حقيقي إذا كان المطلوب تخزينًا دائمًا.
+
+## بنية المشروع
+
+```text
+src/
+├── app/
+│   ├── app.config.ts     # إعداد مزوّدات التطبيق وHTTP والـ Router
+│   ├── app.css           # تنسيقات واجهة التطبيق
+│   ├── app.html          # قالب عرض التذاكر والتفاعلات
+│   ├── app.routes.ts     # تعريف المسارات
+│   ├── app.spec.ts       # اختبارات المكوّن
+│   └── app.ts            # منطق الواجهة وإدارة حالة التذاكر
+├── service/
+│   ├── ticket.ts         # نموذج التذكرة وخدمة طلبات REST
+│   └── ticket.spec.ts    # اختبار خدمة التذاكر
+├── styles.css            # التنسيقات العامة
+├── index.html            # الصفحة الأساسية، باللغة العربية واتجاه RTL
+└── main.ts               # نقطة بدء التطبيق
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## ملاحظات التطوير
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- عنوان الخدمة التجريبية محدد في `src/service/ticket.ts`.
+- نموذج التذكرة يتضمن `id` و`title` و`completed`، وقد يتضمن `userId`.
+- يستعمل المكوّن استراتيجية `OnPush` ويطلب تحديث العرض بعد اكتمال طلبات HTTP.
+- يركّز المشروع على الواجهة والتعامل مع REST API؛ لا يتضمن خادمًا خلفيًا أو قاعدة بيانات.
